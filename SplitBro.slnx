@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/SplitBro.Api/SplitBro.Api.csproj" />
+    <Project Path="src/SplitBro.Application/SplitBro.Application.csproj" />
+    <Project Path="src/SplitBro.Domain/SplitBro.Domain.csproj" />
+    <Project Path="src/SplitBro.Infra/SplitBro.Infra.csproj" />
+  </Folder>
+</Solution>
