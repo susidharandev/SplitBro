@@ -4,10 +4,6 @@
     <ProjectReference Include="..\SplitBro.Domain\SplitBro.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Dto\" />
-  </ItemGroup>
-
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>

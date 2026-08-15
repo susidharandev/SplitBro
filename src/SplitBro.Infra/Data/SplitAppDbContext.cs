@@ -10,8 +10,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-
-
 namespace SplitBro.Infra.Data
 {
     public class SplitAppDbContext : DbContext
