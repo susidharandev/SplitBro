@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SplitBro.Domain
 {
-    internal class Group
+    public class Group
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -14,5 +14,8 @@ namespace SplitBro.Domain
         public bool SimplifyDebt { get; set; } = false;
         public DateTime CreatedAt{ get; set; } = DateTime.UtcNow;
         public DateTime LastUpdatedAt{ get; set;} = DateTime.UtcNow;
+
+        public ICollection<GroupMember> GroupMembers { get; set; } = new List<GroupMember>();
+        public ICollection<Expense> Expenses { get; set; } = new List<Expense>();
     }
 }

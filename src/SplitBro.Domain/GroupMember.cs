@@ -6,10 +6,13 @@ using System.Threading.Tasks;
 
 namespace SplitBro.Domain
 {
-    internal class GroupMemeber
+    public class GroupMember
     {
         public int UserId { get; set; }
-        public int groupId { get; set; }
+        public int GroupId { get; set; }
         public DateTime JoinedAt { get; set; } = DateTime.UtcNow;
+
+        public User User { get; set; }
+        public Group Group { get; set; }
     }
 }

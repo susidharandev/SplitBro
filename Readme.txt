@@ -79,3 +79,41 @@ Inference :  high-level module defines the interface it needs → low-level modu
 ----------
 
 So DI and DIP are different things - DI is technique (hand an object its dependencies), DIP is design principle (reversal of dependency)
+
+
+
+
+
+User
+ │
+ ├──────── GroupMember ─────── Group
+ │                                │
+ │                                │
+ │                              Expense
+ │                                │
+ │                                │
+ │                        ExpenseParticipant
+ │                           /           \
+ │                          /             \
+ │                     UserPaid       UserReceived
+ │
+ │
+ └──────── Settlement
+              /      \
+             /        \
+        UserPay     UserReceive
+		
+		
+		
+		
+✅ Solution / projects
+✅ Domain models
+✅ Relationships
+✅ DbContext
+✅ SQL Server Express
+✅ EF Core SQL Server package
+✅ EF Core CLI
+✅ Migration
+✅ Database update
+        ↓
+NOW: Build application functionality
