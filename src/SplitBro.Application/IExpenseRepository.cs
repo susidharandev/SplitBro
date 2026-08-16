@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SplitBro.Application
 {
-    internal class IExpenseRepository
+    public interface IExpenseRepository
     {
     }
 }

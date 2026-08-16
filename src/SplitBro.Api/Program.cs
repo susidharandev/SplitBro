@@ -23,6 +23,9 @@ builder.Services.AddDbContext<SplitAppDbContext>(option =>  // later move to inf
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<UserManagerService>();
 
+builder.Services.AddScoped<IGroupRepository, GroupRepository>();
+builder.Services.AddScoped<GroupManagerService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

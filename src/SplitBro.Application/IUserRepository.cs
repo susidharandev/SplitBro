@@ -13,5 +13,7 @@ namespace SplitBro.Application
         Task UpdateUserAsync(User user);
         Task<User?> GetByIdAsync(int id);
         Task<User?> GetByEmailAsync(string email);
+        
+        // deletUser
     }
 }
