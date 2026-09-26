@@ -1,0 +1,31 @@
+<div style="padding: 20px; font-family: sans-serif;">
+  <h2>SplitBro Groups Portal</h2>
+
+  <!-- Create New Group Section -->
+  <div style="margin-bottom: 30px; padding: 15px; border: 1px solid #ccc; max-width: 400px;">
+    <h3>Create a New Group</h3>
+    <div style="margin-bottom: 10px;">
+      <input type="text" [(ngModel)]="newGroupName" placeholder="Group Name" style="width: 100%; padding: 8px;" />
+    </div>
+    <div style="margin-bottom: 10px;">
+      <input type="text" [(ngModel)]="newGroupDescription" placeholder="Description (Optional)" style="width: 100%; padding: 8px;" />
+    </div>
+    <button (click)="onCreateGroup()" style="padding: 8px 16px; background-color: #28a745; color: white; border: none; cursor: pointer;">
+      Add Group
+    </button>
+  </div>
+  
+    <div>
+    <h3>Your Groups</h3>
+    <ul *ngIf="groups.length > 0; else noGroups">
+      <li *ngFor="let group of groups" style="margin-bottom: 10px; padding: 10px; background-color: #f4f4f4; list-style: none;">
+        <strong>{{ group.name }}</strong> 
+        <p style="margin: 5px 0 0 0; color: #666; font-size: 0.9em;">{{ group.description }}</p>
+      </li>
+    </ul>
+
+     <ng-template #noGroups>
+      <p>No active groups found. Type a name above to create your first tracking group!</p>
+    </ng-template>
+  </div>
+</div>
