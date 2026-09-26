@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using static SplitBro.Domain.Enums.GroupDto;
 
 namespace SplitBro.Application.Service
@@ -12,10 +13,14 @@ namespace SplitBro.Application.Service
     {
         private readonly IGroupRepository _groupRepository;
         private readonly IUserRepository _userRepository;
-        public GroupManagerService(IGroupRepository groupRepository, IUserRepository userRepository)
+
+        private readonly ILogger<GroupManagerService> _logger;
+
+        public GroupManagerService(IGroupRepository groupRepository, IUserRepository userRepository, ILogger<GroupManagerService> logger)
         {
             _groupRepository = groupRepository;
             _userRepository = userRepository;
+            _logger = logger;
         }
         public async Task<GroupResponse> CreateGroupWithMemberAsync(CreateGroupRequest createGroupRequest)
         {
@@ -41,6 +46,8 @@ namespace SplitBro.Application.Service
 
             var newGroup = await _groupRepository.CreateGroupWithMemberAsync(group, groupMember);
 
+            _logger.LogInformation("Created group for user {UserId}", createGroupRequest.UserId);
+
             return ToGroupResponse(newGroup);
         }
         public async Task<GroupResponse> GetGroupByIdAsync (int groupId)
@@ -48,7 +55,10 @@ namespace SplitBro.Application.Service
             var group = await _groupRepository.GetGroupByIdAsync(groupId);
 
             if (group == null)
+            {
+                _logger.LogInformation("Group with ID {Id} not found", groupId);
                 throw new KeyNotFoundException("Group not found");
+            }
 
             return ToGroupResponse(group);
         }
@@ -72,10 +82,10 @@ namespace SplitBro.Application.Service
 
             await _groupRepository.UpdateGroupAsync(group);
 
+            _logger.LogInformation("Group Details Updated for Group Id {GroupId}", groupId);
+
             return ToGroupResponse(group);
         }
-
-
 
         public async Task<MemberResponse> AddMemberAsync(int groupId, int userId)
         {
@@ -103,6 +113,8 @@ namespace SplitBro.Application.Service
 
             var newMember = await _groupRepository.AddMemberAsync(groupMember);
 
+            _logger.LogInformation("Member {UserId} added to group {GroupId}", userId, groupId);
+
             return new MemberResponse
             {
                 UserId = userId,
@@ -117,7 +129,10 @@ namespace SplitBro.Application.Service
             var group = await _groupRepository.GetGroupByIdAsync(groupId);
 
             if (group == null)
+            {
+                _logger.LogInformation("Group Id {GroupId} not found", groupId);
                 throw new KeyNotFoundException("Group not found");
+            }
 
             var members = await _groupRepository.GetMembersAsync(groupId);
 
@@ -147,6 +162,8 @@ namespace SplitBro.Application.Service
                 throw new InvalidOperationException("A group must have at least one member.");
 
             await _groupRepository.RemoveMemberAsync(member);
+
+            _logger.LogInformation("Member Removed from group {GroupId}", groupId);
         }
         private static GroupResponse ToGroupResponse(Group group)
         {

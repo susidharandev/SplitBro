@@ -1,13 +1,16 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace SplitBro.Api.Middleware
 {
     public class ExceptionHandlingMiddleware
     {
         private readonly RequestDelegate _next;
-        public ExceptionHandlingMiddleware(RequestDelegate next) 
+        private readonly ILogger<ExceptionHandlingMiddleware> _logger;
+        public ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger) 
         {
             _next = next;
+            _logger = logger;
         }
 
         public async Task InvokeAsync(HttpContext httpContext)
@@ -18,6 +21,9 @@ namespace SplitBro.Api.Middleware
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex,"Unhandled Exception in method : {method}, path : {path}", 
+                    httpContext.Request.Method, httpContext.Request.Path);
+
                 await HandleExceptionAsync(httpContext,ex);
             }
         }
@@ -32,9 +38,12 @@ namespace SplitBro.Api.Middleware
                 _ => StatusCodes.Status500InternalServerError
             };
 
-            var response = new
+            var response = new ProblemDetails
             {
-                message = exception.Message
+                Status = httpContext.Response.StatusCode,
+                Title = httpContext.Response.StatusCode.ToString(),
+                Detail = (httpContext.Response.StatusCode == 500) ? "An unexpected error occurred." : exception.Message,
+                Instance = httpContext.Request.Path
             };
 
             await httpContext.Response.WriteAsJsonAsync(response);

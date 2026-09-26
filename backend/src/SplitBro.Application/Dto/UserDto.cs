@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,13 +11,16 @@ namespace SplitBro.Application.Dto
     {
         public class CreateUserRequest
         {
-            public string Name { get; set; } = string.Empty;
-            public string Email { get; set; } = string.Empty;
+            [Required]
+            public string Name { get; set; }
+            [Required]
+            public string Email { get; set; } 
             public string? Phone { get; set; }
         }
         public class UpdateUserRequest
         {
-            public string Name { get; set; } = string.Empty;
+            [Required]
+            public string Name { get; set; } 
             public string? Phone { get; set; }
         }
         public class UserResponse
