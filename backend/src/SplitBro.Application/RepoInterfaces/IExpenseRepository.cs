@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SplitBro.Application
+namespace SplitBro.Application.InfraInterfaces
 {
-    public interface ISettlementRepository
+    public interface IExpenseRepository
     {
     }
 }

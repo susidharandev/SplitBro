@@ -5,12 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SplitBro.Application
+namespace SplitBro.Application.InfraInterfaces
 {
     public interface IGroupRepository
     {
         Task<Group> CreateGroupWithMemberAsync(Group group, GroupMember groupMember);
         Task<Group?> GetGroupByIdAsync(int groupId);
+        Task<List<Group>> GetGroupAllAsync();
         Task UpdateGroupAsync(Group group);
 
 
