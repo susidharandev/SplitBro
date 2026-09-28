@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SplitBro.Application;
+using SplitBro.Application.InfraInterfaces;
 using SplitBro.Domain;
 using SplitBro.Infra.Data;
 using System;
@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static SplitBro.Domain.Enums.GroupDto;
 
 namespace SplitBro.Infra.Repo
 {
@@ -18,6 +17,7 @@ namespace SplitBro.Infra.Repo
         {
             _context = context;
         }
+        // Group Repository Methods
         public async Task<Group> CreateGroupWithMemberAsync(Group group, GroupMember groupMember)
         {
             await using var transaction = await _context.Database.BeginTransactionAsync();
@@ -30,7 +30,7 @@ namespace SplitBro.Infra.Repo
 
                 groupMember.GroupId = group.Id;
 
-                _context.GroupMemebers.Add(groupMember);
+                _context.GroupMembers.Add(groupMember);
 
                 await _context.SaveChangesAsync();
 
@@ -44,6 +44,10 @@ namespace SplitBro.Infra.Repo
                 throw;
             }
         }
+        public async Task<List<Group>> GetGroupAllAsync()
+        {
+            return await _context.Groups.AsNoTracking().OrderBy(x => x.Name).ToListAsync();
+        }
         public async Task<Group?> GetGroupByIdAsync(int groupId)
         {
             return await _context.Groups.FirstOrDefaultAsync(x=> x.Id == groupId);
@@ -54,31 +58,32 @@ namespace SplitBro.Infra.Repo
             await _context.SaveChangesAsync();
         }
 
+        // Group Member Repository Methods
         public async Task<GroupMember> AddMemberAsync(GroupMember groupMember)
         {
-            _context.GroupMemebers.Add(groupMember);
+            _context.GroupMembers.Add(groupMember);
             await _context.SaveChangesAsync();
 
             return groupMember;
         }
         public async Task<List<GroupMember>> GetMembersAsync(int groupId)
         {
-            return await _context.GroupMemebers
+            return await _context.GroupMembers
                         .Include(x => x.User) // N+1 query problem:
                         .Where(x => x.GroupId == groupId)
                         .ToListAsync();
         }
         public async Task<GroupMember?> GetMemberAsync(int groupId, int userId)
         {
-            return await _context.GroupMemebers.FirstOrDefaultAsync(x => x.GroupId == groupId && x.UserId == userId);
+            return await _context.GroupMembers.FirstOrDefaultAsync(x => x.GroupId == groupId && x.UserId == userId);
         }
         public async Task<int> GetMemberCountAsync(int groupId)
         {
-            return await _context.GroupMemebers.CountAsync(x => x.GroupId == groupId);
+            return await _context.GroupMembers.CountAsync(x => x.GroupId == groupId);
         }
         public async Task RemoveMemberAsync(GroupMember groupMember)
         {
-            _context.GroupMemebers.Remove(groupMember);
+            _context.GroupMembers.Remove(groupMember);
             await _context.SaveChangesAsync();
         }
     }

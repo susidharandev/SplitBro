@@ -9,12 +9,13 @@ namespace SplitBro.Application.InfraInterfaces
 {
     public interface IGroupRepository
     {
+        // Group
         Task<Group> CreateGroupWithMemberAsync(Group group, GroupMember groupMember);
         Task<Group?> GetGroupByIdAsync(int groupId);
         Task<List<Group>> GetGroupAllAsync();
         Task UpdateGroupAsync(Group group);
 
-
+        // groupMember
         Task<GroupMember> AddMemberAsync(GroupMember groupMember);
         Task<GroupMember?> GetMemberAsync(int groupId, int userId);
         Task<List<GroupMember>> GetMembersAsync(int groupId);

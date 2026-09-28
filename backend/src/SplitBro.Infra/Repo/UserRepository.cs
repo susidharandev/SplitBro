@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SplitBro.Application;
+using SplitBro.Application.InfraInterfaces;
 using SplitBro.Domain;
 using SplitBro.Infra.Data;
 using System;

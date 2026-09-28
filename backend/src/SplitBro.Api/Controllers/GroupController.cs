@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SplitBro.Application.Service;
-using static SplitBro.Domain.Enums.GroupDto;
+using static SplitBro.Application.Dto.GroupDto;
 
 namespace SplitBro.Api.Controllers
 {
@@ -15,19 +15,25 @@ namespace SplitBro.Api.Controllers
             _groupManagerService = groupManagerService;
         }
 
+        // Group Endpoints
         [HttpPost]
         public async Task<IActionResult> CreateGroup([FromBody] CreateGroupRequest request)
         {
             var group = await _groupManagerService.CreateGroupWithMemberAsync(request);
-
             return Ok(group);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetGroupAll()
+        {
+            var allGroups = await _groupManagerService.GetGroupAllAsync();
+            return Ok(allGroups);
         }
 
         [HttpGet("{groupId:int}")]
         public async Task<IActionResult> GetGroup(int groupId)
         {
             var group = await _groupManagerService.GetGroupByIdAsync(groupId);
-
             return Ok(group);
         }
 
@@ -35,10 +41,10 @@ namespace SplitBro.Api.Controllers
         public async Task<IActionResult> UpdateGroup(int groupId, [FromBody] UpdateGroupRequest request)
         {
             var group = await _groupManagerService.UpdateGroupAsync(groupId, request);
-
             return Ok(group);
         }
 
+        // Group Members Endpoints
         [HttpPost("{groupId:int}/members/{userId:int}")]
         public async Task<IActionResult> AddMember(int groupId, int userId)
         {

@@ -5,7 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using static SplitBro.Domain.Enums.GroupDto;
+using SplitBro.Application.InfraInterfaces;
+using static SplitBro.Application.Dto.GroupDto;
 
 namespace SplitBro.Application.Service
 {
@@ -22,6 +23,8 @@ namespace SplitBro.Application.Service
             _userRepository = userRepository;
             _logger = logger;
         }
+
+        // Group Management Methods
         public async Task<GroupResponse> CreateGroupWithMemberAsync(CreateGroupRequest createGroupRequest)
         {
             if (createGroupRequest == null)
@@ -49,6 +52,17 @@ namespace SplitBro.Application.Service
             _logger.LogInformation("Created group for user {UserId}", createGroupRequest.UserId);
 
             return ToGroupResponse(newGroup);
+        }
+        public async Task<List<GroupResponse>> GetGroupAllAsync()
+        {
+            var groups = await _groupRepository.GetGroupAllAsync();
+
+            if (groups.Count == 0)
+            {
+                _logger.LogInformation("No Groups found");
+            }
+
+            return groups.Select(group => ToGroupResponse(group)).ToList();
         }
         public async Task<GroupResponse> GetGroupByIdAsync (int groupId)
         {
@@ -87,6 +101,7 @@ namespace SplitBro.Application.Service
             return ToGroupResponse(group);
         }
 
+        // Group Member Management Methods
         public async Task<MemberResponse> AddMemberAsync(int groupId, int userId)
         {
             var group = await _groupRepository.GetGroupByIdAsync(groupId);
@@ -171,6 +186,7 @@ namespace SplitBro.Application.Service
             {
                 Id = group.Id,
                 Name = group.Name,
+                Description = group.Description,
                 CreatedAt = group.CreatedAt
             };
         }

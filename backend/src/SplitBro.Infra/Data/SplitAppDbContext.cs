@@ -23,7 +23,7 @@ namespace SplitBro.Infra.Data
         //tables
         public DbSet<User> Users { get; set; }
         public DbSet<Domain.Group> Groups { get; set; }
-        public DbSet<GroupMember> GroupMemebers { get; set; }
+        public DbSet<GroupMember> GroupMembers { get; set; }
         public DbSet<Expense> Expenses { get; set; }
         public DbSet<ExpenseParticipant> ExpenseParticipants { get; set; }
         public DbSet<Settlement> Settlements { get; set; }
@@ -140,6 +140,7 @@ namespace SplitBro.Infra.Data
                     gm.UserId
                 });
 
+            modelBuilder.Entity<GroupMember>().ToTable("GroupMemebers");
         }
     }
 }

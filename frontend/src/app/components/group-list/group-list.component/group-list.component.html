@@ -17,8 +17,8 @@
   
     <div>
     <h3>Your Groups</h3>
-    <ul *ngIf="groups.length > 0; else noGroups">
-      <li *ngFor="let group of groups" style="margin-bottom: 10px; padding: 10px; background-color: #f4f4f4; list-style: none;">
+    <ul *ngIf="groups().length > 0; else noGroups">
+      <li *ngFor="let group of groups()" style="margin-bottom: 10px; padding: 10px; background-color: #f4f4f4; list-style: none;">
         <strong>{{ group.name }}</strong> 
         <p style="margin: 5px 0 0 0; color: #666; font-size: 0.9em;">{{ group.description }}</p>
       </li>

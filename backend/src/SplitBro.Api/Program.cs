@@ -62,8 +62,9 @@ app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseMiddleware<RequestLoggingMiddleware>();
 
 
-app.UseHttpsRedirection();
 app.UseCors("AllowAll");
+app.UseHttpsRedirection();
+
 //app.UseAuthentication();
 //app.UseAuthorization();
 //app.MapGet("/health", () => Results.Ok("Healthy"));

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal, Signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Group } from '../../../models/group.model';
 import { GroupService } from '../../../services/group.service';
@@ -16,7 +16,7 @@ export class GroupListComponent implements OnInit {
   ngOnInit(): void {
     this.loadGroup();
   }
-  groups: Group[] = [];
+  groups = signal<Group[]>([]); 
 
   newGroupName: string = '';
   newGroupDescription: string = '';
@@ -24,7 +24,7 @@ export class GroupListComponent implements OnInit {
   loadGroup(): void {
     this.groupService.getGroups().subscribe({
       next: (data) => {
-        this.groups = data;
+        this.groups.set(data);
       },
       error: (err) => {
         console.error('error fetching group', err);
@@ -35,13 +35,14 @@ export class GroupListComponent implements OnInit {
     if (!this.newGroupName.trim()) return;
 
     const payload = {
+      userId: 1, // temp for now until user is implemented
       name: this.newGroupName,
       description: this.newGroupDescription,
     };
 
     this.groupService.createGroup(payload).subscribe({
       next: (data) => {
-        this.groups.push(data);
+      this.groups.update(current => [...current, data]); 
         this.newGroupName = '';
         this.newGroupDescription = '';
       },
