@@ -9,7 +9,7 @@ export interface Group
     createdAt:Date;
      lastUpdatedAt: Date;    
 
-     groupMembers?:GroupMember;
-     expense? : Expense;
+     groupMembers?:GroupMember[];
+     expense? : Expense[];
 
 }
