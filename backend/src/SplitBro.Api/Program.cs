@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using SplitBro.Api.Middleware;
-using SplitBro.Application;
+using SplitBro.Application.InfraInterfaces;
 using SplitBro.Application.Service;
 using SplitBro.Infra.Data;
 using SplitBro.Infra.Repo;
@@ -18,6 +18,16 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddLogging();  // not mandatory to register - auto
 builder.Services.AddProblemDetails();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
 
 builder.Services.AddDbContext<SplitAppDbContext>(option =>  // later move to infra as extension method
 {
@@ -47,6 +57,7 @@ app.UseMiddleware<RequestLoggingMiddleware>();
 
 
 app.UseHttpsRedirection();
+app.UseCors("AllowAll");
 //app.UseAuthentication();
 //app.UseAuthorization();
 //app.MapGet("/health", () => Results.Ok("Healthy"));
