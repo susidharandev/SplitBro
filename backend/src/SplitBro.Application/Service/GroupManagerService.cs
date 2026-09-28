@@ -117,7 +117,7 @@ namespace SplitBro.Application.Service
             var existingMember = await _groupRepository.GetMemberAsync(groupId, userId);
 
             if (existingMember != null)
-                throw new InvalidOperationException("User is already a member of this group.");
+                throw new InvalidOperationException($"{user.Name} is already a member of this {group.Name} group.");
 
             var groupMember = new GroupMember
             {
@@ -133,6 +133,8 @@ namespace SplitBro.Application.Service
             return new MemberResponse
             {
                 UserId = userId,
+                UserName = user.Name,
+                UserEmail = user.Email,
                 GroupId = groupId,
                 GroupName = group.Name,
                 JoinedAt = newMember.JoinedAt
@@ -154,6 +156,8 @@ namespace SplitBro.Application.Service
             return members.Select(member => new MemberResponse
             {
                 UserId = member.UserId,
+                UserName = member.User.Name,
+                UserEmail = member.User.Email,
                 GroupId = member.GroupId,
                 GroupName = group.Name,
                 JoinedAt = member.JoinedAt

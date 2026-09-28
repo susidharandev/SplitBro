@@ -1,31 +1,131 @@
-<div style="padding: 20px; font-family: sans-serif;">
-  <h2>SplitBro Groups Portal</h2>
+<!-- Hidden HTML toggle to switch RHS views without touching .ts -->
+<input type="checkbox" #settingsToggle style="display: none;" />
 
-  <!-- Create New Group Section -->
-  <div style="margin-bottom: 30px; padding: 15px; border: 1px solid #ccc; max-width: 400px;">
-    <h3>Create a New Group</h3>
-    <div style="margin-bottom: 10px;">
-      <input type="text" [(ngModel)]="newGroupName" placeholder="Group Name" style="width: 100%; padding: 8px;" />
+<div style="padding: 20px; font-family: sans-serif; display: flex; gap: 40px;">
+
+  <!-- LEFT COLUMN: Groups List & Create -->
+  <div style="flex: 1; max-width: 420px;">
+    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+      <img src="/SplitBro_logo.png" alt="SplitBro Logo" style="height: 54px; width: auto; object-fit: contain;" />
+      <h2 style="margin: 0;">SplitBro</h2>
     </div>
-    <div style="margin-bottom: 10px;">
-      <input type="text" [(ngModel)]="newGroupDescription" placeholder="Description (Optional)" style="width: 100%; padding: 8px;" />
+
+    <!-- Create Group Box -->
+    <div style="margin-bottom: 25px; padding: 15px; border: 1px solid #ddd; border-radius: 6px; background: #fafafa;">
+      <h3 style="margin-top: 0;">Create a New Group</h3>
+      <div style="margin-bottom: 10px;">
+        <input type="text" [(ngModel)]="newGroupName" placeholder="Group Name" style="width: 100%; padding: 8px; box-sizing: border-box;" />
+      </div>
+      <div style="margin-bottom: 10px;">
+        <input type="text" [(ngModel)]="newGroupDescription" placeholder="Description (Optional)" style="width: 100%; padding: 8px; box-sizing: border-box;" />
+      </div>
+      <button (click)="onCreateGroup()" style="padding: 8px 16px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">
+        Add Group
+      </button>
     </div>
-    <button (click)="onCreateGroup()" style="padding: 8px 16px; background-color: #28a745; color: white; border: none; cursor: pointer;">
-      Add Group
-    </button>
-  </div>
-  
+
+    <!-- Groups List -->
     <div>
-    <h3>Your Groups</h3>
-    <ul *ngIf="groups().length > 0; else noGroups">
-      <li *ngFor="let group of groups()" style="margin-bottom: 10px; padding: 10px; background-color: #f4f4f4; list-style: none;">
-        <strong>{{ group.name }}</strong> 
-        <p style="margin: 5px 0 0 0; color: #666; font-size: 0.9em;">{{ group.description }}</p>
-      </li>
-    </ul>
+      <h3>Your Groups</h3>
+      <ul *ngIf="groups().length > 0; else noGroups" style="padding: 0; margin: 0;">
+        <li *ngFor="let group of groups()"
+            (click)="onSelectGroup(group); settingsToggle.checked = false"
+            [style.border]="selectedGroup()?.id === group.id ? '2px solid #007bff' : '1px solid #eee'"
+            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 12px; background-color: #f8f9fa; border-radius: 6px; list-style: none; cursor: pointer; transition: all 0.2s;">
+          
+          <!-- Card Body: Clicking opens Expenses on RHS -->
+          <div>
+            <strong style="font-size: 1.1em;">{{ group.name }}</strong>
+            <p style="margin: 5px 0 0 0; color: #666; font-size: 0.9em;">{{ group.description || 'No description' }}</p>
+          </div>
 
-     <ng-template #noGroups>
-      <p>No active groups found. Type a name above to create your first tracking group!</p>
-    </ng-template>
+          <!-- ⚙️ Gear Button: Clicking opens Members on RHS -->
+          <button (click)="onSelectGroup(group); settingsToggle.checked = true; $event.stopPropagation()" 
+                  title="Manage Members"
+                  style="padding: 6px 10px; background: #fff; border: 1px solid #ccc; border-radius: 4px; cursor: pointer; font-size: 1.1em;">
+            ⚙️
+          </button>
+        </li>
+      </ul>
+
+      <ng-template #noGroups>
+        <p style="color: #888;">No active groups found. Create your first group above!</p>
+      </ng-template>
+    </div>
   </div>
+
+  <!-- RIGHT COLUMN: Same RHS used for both Expenses and Members -->
+  <div style="flex: 1; border-left: 2px solid #eee; padding-left: 30px;" *ngIf="selectedGroup(); else noGroupSelected">
+    
+    <!-- Group Header & View Switcher -->
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid #ddd; padding-bottom: 15px; margin-bottom: 20px;">
+      <div>
+        <h2 style="margin: 0; color: #007bff;">{{ selectedGroup()?.name }}</h2>
+        <p style="margin: 5px 0 0 0; color: #666;">{{ selectedGroup()?.description }}</p>
+      </div>
+
+      <!-- Button toggles between Expenses and Members inside RHS -->
+      <div>
+        <button *ngIf="!settingsToggle.checked" 
+                (click)="settingsToggle.checked = true"
+                style="padding: 8px 14px; background: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer;">
+          ⚙️ Manage Members
+        </button>
+
+        <button *ngIf="settingsToggle.checked" 
+                (click)="settingsToggle.checked = false"
+                style="padding: 8px 14px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">
+          📊 Back to Expenses
+        </button>
+      </div>
+    </div>
+
+    <!-- VIEW 1: EXPENSES (Visible when group card is clicked) -->
+    <div *ngIf="!settingsToggle.checked">
+      <div style="text-align: center; padding: 60px 20px; background: #fafafa; border: 2px dashed #ddd; border-radius: 8px; color: #777;">
+        <h3 style="margin-top: 0; color: #555;">📊 Expenses & Balances</h3>
+        <p>No expenses recorded yet. This area will display expense transactions, splits, and debt balances in the next milestone!</p>
+      </div>
+    </div>
+
+    <!-- VIEW 2: MANAGE MEMBERS (Visible when ⚙️ icon is clicked) -->
+    <div *ngIf="settingsToggle.checked">
+      <h3>Group Members ({{ members().length }})</h3>
+
+      <!-- Error message if any -->
+      <div *ngIf="memberErrorMessage" style="padding: 10px; margin-bottom: 15px; background: #ffebee; color: #c62828; border-radius: 4px; font-size: 0.9em;">
+        {{ memberErrorMessage }}
+      </div>
+
+      <!-- Add Member Box -->
+      <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+        <input type="number" [(ngModel)]="newMemberUserId" placeholder="User ID (e.g. 2, 3)" style="padding: 8px; width: 140px;" />
+        <button (click)="onAddMember()" style="padding: 8px 14px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">
+          + Add Member
+        </button>
+      </div>
+
+      <!-- Members List -->
+      <ul style="padding: 0; margin: 0;">
+        <li *ngFor="let member of members()" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; margin-bottom: 8px; background: #fff; border: 1px solid #e0e0e0; border-radius: 6px;">
+          <div>
+            <strong>👤 {{ member.userName || 'User #' + member.userId }}</strong>
+            <span style="color: #777; font-size: 0.85em; margin-left: 8px;">{{ member.userEmail }}</span>
+          </div>
+          <button (click)="onRemoveMember(member.userId)" style="padding: 4px 8px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.8em;">
+            Remove
+          </button>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- Fallback when no group is selected -->
+  <ng-template #noGroupSelected>
+    <div style="flex: 1; display: flex; align-items: center; justify-content: center; color: #999;">
+      <p>👈 Select a group from the left to view its dashboard</p>
+    </div>
+  </ng-template>
+
 </div>
