@@ -1,7 +1,9 @@
 ﻿
+using Microsoft.AspNetCore.Mvc;
+
 namespace SplitBro.Api.Controllers
 {
-    public class SettlementController
+    public class SettlementController : ControllerBase
     {
     }
 }

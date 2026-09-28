@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SplitBro.Application.Dto
 {
-    public class Dto
+    public class UserDto
     {
         public class CreateUserRequest
         {

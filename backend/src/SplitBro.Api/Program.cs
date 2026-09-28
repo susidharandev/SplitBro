@@ -42,6 +42,12 @@ builder.Services.AddScoped<UserManagerService>();
 builder.Services.AddScoped<IGroupRepository, GroupRepository>();
 builder.Services.AddScoped<GroupManagerService>();
 
+builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
+builder.Services.AddScoped<ExpenseManagerService>();
+
+builder.Services.AddScoped<ISettlementRepository, SettlementRepository>();
+builder.Services.AddScoped<SettlementManagerService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

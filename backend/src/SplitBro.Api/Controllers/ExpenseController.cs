@@ -1,6 +1,8 @@
-﻿namespace SplitBro.Api.Controllers
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace SplitBro.Api.Controllers
 {
-    public class ExpenseController
+    public class ExpenseController : ControllerBase
     {
     }
 }

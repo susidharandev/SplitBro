@@ -1,7 +1,7 @@
 ﻿using Azure.Core;
 using Microsoft.AspNetCore.Mvc;
 using SplitBro.Application.Service;
-using static SplitBro.Application.Dto.Dto;
+using static SplitBro.Application.Dto.UserDto;
 
 namespace SplitBro.Api.Controllers
 {

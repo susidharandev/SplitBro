@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SplitBro.Domain.Enums
+namespace SplitBro.Application.Dto
 {
     public class GroupDto
     {
@@ -42,6 +42,7 @@ namespace SplitBro.Domain.Enums
         {
             public int Id { get; set; }
             public string Name { get; set; }
+            public string? Description { get; set; }
             public DateTime CreatedAt { get; set; }
         }
         public class MemberResponse

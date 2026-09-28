@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SplitBro.Application.Service
 {
-    internal class SettlementManagerService
+    public class SettlementManagerService
     {
     }
 }
