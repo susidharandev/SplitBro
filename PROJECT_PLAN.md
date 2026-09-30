@@ -21,11 +21,17 @@
 ## 2. Overall Progress Tracker
 
 - [x] **Milestone 1: Groups & Members Management** (100% Completed)
-- [ ] **Milestone 2: Expenses & Splitting (Single-Payer)** (Next Focus)
+- [ ] **🚀 Immediate Next Priority: 3-Layer Layout UI & User Identity Foundation** (Pre-M2)
+  - [ ] Backend: `GET /api/user` (Fetch all registered users)
+  - [ ] Frontend: `CurrentUserService` with `activeUser` signal & switcher
+  - [ ] Frontend: `NavbarComponent` (Top bar with Logo & User Switcher)
+  - [ ] Frontend: `SidebarComponent` (Left navigation with Groups list)
+  - [ ] Frontend: Center & Right Workspace setup
+- [ ] **Milestone 2: Expenses & Splitting (Single-Payer)**
 - [ ] **Milestone 3: Live Group Balances & Scorecard**
 - [ ] **Milestone 4: Settle Up & Debt Clearance**
 - [ ] **Milestone 5: Multi-Payer Bill Splitting**
-- [ ] **Milestone 6: Active User Switcher & Polishing**
+- [ ] **Milestone 6: Authentication & Polishing**
 
 ---
 
@@ -85,6 +91,27 @@ The entire desktop application is anchored by a persistent **3-Zone Layout** tha
   - Group creation form with Signals.
   - Group selection switching RHS view.
   - Member management (view, add by ID, remove).
+
+---
+
+### 🚀 Immediate Priority: 3-Layer Layout UI & User Identity Foundation (Pre-M2)
+> **Status:** 🔄 In Progress
+> **Goal:** Establish the authentic Splitwise 3-zone visual layout and enable multi-user switching before building the expense engine.
+
+#### Backend Plan:
+1. **User Directory API (`UserController.cs`):**
+   - Add `GetAllAsync()` in `IUserRepository.cs` and `UserRepository.cs`.
+   - Add `GetAllUsersAsync()` in `UserManagerService.cs`.
+   - Add `[HttpGet] GetAllUsers()` ➔ `GET /api/user` in `UserController.cs`.
+
+#### Frontend Plan:
+1. **User Context & Model (`CurrentUserService`):**
+   - Create `src/app/models/user.model.ts` (`id`, `name`, `email`).
+   - Create `src/app/services/current-user.service.ts` with `activeUser = signal<User | null>(null)` and `allUsers = signal<User[]>([])`.
+2. **Layout Components Scaffolding:**
+   - `NavbarComponent` (`src/app/layout/navbar/`): Top mint-teal bar (`#5bc5a7`), SplitBro logo, and Active User Switcher dropdown.
+   - `SidebarComponent` (`src/app/layout/sidebar/`): Left navigation (~240px) with Groups list and "+ Add Group".
+   - **Main Workspace Setup:** Center column (Group Header + empty expense timeline) + Right column (Group Members scorecard & management).
 
 ---
 
